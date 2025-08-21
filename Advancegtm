@@ -44,4 +44,4 @@ for i in {1..2}; do
   sleep 3
 done
 
-echo "Arjienx DNSTT Client - Successfully Installed."
+echo "Medrano DNSTT Client - Successfully Installed."
