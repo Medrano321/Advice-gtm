@@ -1,0 +1,47 @@
+#!/bin/bash
+#Klent Advanced DNSTT Script v.0.2.2x 2025-2026
+
+cd ~
+rm -rf install
+architecture=$(uname -m)
+echo "Architecture: $architecture"
+
+if [ ! -d "$HOME/storage" ]; then
+    termux-setup-storage
+fi
+
+version=$(getprop ro.build.version.release)
+if [[ "$version" =~ ^5.* || "$version" =~ ^6.* ]]; then
+    echo "deb https://packages.termux.dev/termux-main-21/ stable main" > "$PREFIX/etc/apt/sources.list"
+    echo "deb https://termux.dev/game-packages-21-bin games stable" > "$PREFIX/etc/apt/sources.list.d/game.list"
+    echo "deb https://termux.dev/science-packages-21-bin science stable" > "$PREFIX/etc/apt/sources.list.d/science.list"
+    clear
+else
+    echo "Current version: $version"
+fi
+
+export DEBIAN_FRONTEND=noninteractive
+apt update
+apt upgrade -y openssl curl -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
+apt install -y dnsutils nano curl -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
+
+rm -rf ~/.bashrc
+echo "alias dnstt-client='cd ~ && dnstt-client'" > ~/.bashrc
+source ~/.bashrc
+
+echo "" > ../usr/bin/dnstt-client
+if uname -m | grep -Eq '^armv7|^armv71'; then
+    curl --insecure -fL -o ../usr/bin/dnstt-client https://raw.githubusercontent.com/arjienx/client-dnstt-app/main/client-dnstt-armv7
+else
+    curl --insecure -fL -o ../usr/bin/dnstt-client https://raw.githubusercontent.com/arjienx/client-dnstt-app/main/client-dnstt-arm64
+fi
+chmod +x ../usr/bin/dnstt-client
+
+for i in {1..2}; do
+  if [ ! -x ../usr/bin/dnstt-client ]; then
+    chmod +x ../usr/bin/dnstt-client
+  fi
+  sleep 3
+done
+
+echo "Arjienx DNSTT Client - Successfully Installed."
