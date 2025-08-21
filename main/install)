@@ -1,5 +1,5 @@
 #!/bin/bash
-#Klent Advanced DNSTT Script v.0.2.2x 2025-2026
+#Klent1 Advanced DNSTT Script v.0.2.2x 2025-2026
 
 cd ~
 rm -rf install
